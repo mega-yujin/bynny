@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block my_content %}
+<div class="row">
+    <form class="form-inline w-100">
+        <div class="col-sm-4 col-md-3 col-lg-4">
+            <span>Количество записей на странице:</span>
+        </div>
+        <div class="col-7 col-sm-4 col-md-3 col-lg-3">
+            <input type="number" class="form-control-sm" id="bd_rows" name="rows" value="{{rows}}" min="1">
+        </div>
+        <div class="col-4 col-sm-2 col-md-3 col-lg-3">
+            <button type="submit" class="btn btn-primary btn-sm">Показать</button>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="col bg-white table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">User id</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Username</th>
+                <th scope="col">Сообщение</th>
+                <th scope="col">Ответ</th>
+                <th scope="col">Timestamp</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for log_row in the_data %}
+            <tr>
+                <th scope="row">{{log_row[0]}}</th>
+                {% for item in log_row[1:-1] %}
+                <td>{{item}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block my_content %}
+<div class="row">
+    <div class="col-sm-6" style="margin-bottom: 15px;">
+        <div class="card h-100">
+            <!--				<img src="..." class="card-img-top" alt="...">-->
+            <div class="card-body">
+                <h5 class="card-title">Курс НБРБ</h5>
+                <p class="card-text">{{rates[0]}}<br>{{rates[1]}}<br>{{rates[2]}}<br>{{rates[3]}}</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6" style="margin-bottom: 15px;">
+        <div class="card h-100">
+            <!--    			<img src="..." class="card-img-top" alt="...">-->
+            <div class="card-body">
+                <h5 class="card-title">Лучший курс обмена</h5>
+                <p class="card-text">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Банк покупает</th>
+                        <th scope="col">Банк продает</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">Доллар США</th>
+                        <td>2.6250</td>
+                        <td>2.6280</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ЕВРО</th>
+                        <td>3.0930</td>
+                        <td>3.0980</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">100 RUR</th>
+                        <td>3.4560</td>
+                        <td>3.4550</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6" style="margin-bottom: 15px;">
+        <div class="card h-100">
+            <!--				<img src="..." class="card-img-top" alt="...">-->
+            <div class="card-body">
+                <h5 class="card-title">Стоимость 1 BYN</h5>
+                <p class="card-text">{{byn_cost[0]}} USD<br>{{byn_cost[1]}} EUR<br>{{byn_cost[2]}} RUR</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6" style="margin-bottom: 15px;">
+        <div class="card h-100">
+             <!--				<img src="..." class="card-img-top" alt="...">-->
+            <div class="card-body">
+                <h5 class="card-title">Результаты торгов на бирже</h5>
+                <p class="card-text">{{exchange_rates[0]}}<br>{{exchange_rates[1]}}<br>{{exchange_rates[2]}}</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

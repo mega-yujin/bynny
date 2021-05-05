@@ -1,0 +1,8 @@
+Flask
+pyTelegramBotAPI
+requests
+bs4
+mysql-connector-python
+gunicorn
+Flask-Bootstrap4
+python-dotenv

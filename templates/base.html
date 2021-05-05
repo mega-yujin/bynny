@@ -1,0 +1,49 @@
+{% extends 'bootstrap/base.html' %}
+
+
+{%- block styles %}
+{{super()}}
+    <link rel="stylesheet" href="static/style.css">
+{% endblock %}
+
+{% block title %}
+	{% if title %}{{ title }}{% else %}Bynny{% endif %}
+{% endblock %}
+
+{% block navbar %}
+    <header>
+        <div class="container">
+            <div class="row justify-content-between align-items-center">
+                <ul class="col list-inline d-none d-md-block">
+                    <li class="list-inline-item"><a href="{{ url_for('index') }}">Главная</a></li>
+                    <li class="list-inline-item"><a href="{{ url_for('log') }}">Лог</a></li>
+                    <li class="list-inline-item"><a href="{{ url_for('stat') }}">Статистика</a></li>
+                    <li class="list-inline-item"><a href="{{ url_for('ctrl') }}">Управление</a></li>
+                </ul>
+                <div class="dropdown d-block d-md-none">
+                    <button class="btn btn-link btn-lg"
+                            type="button"
+                            id="dropdownMenuButton"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            style="padding-top: 0.75rem;"><i class="fas fa-bars fa-1x"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{{ url_for('index') }}">Главная</a>
+                        <a class="dropdown-item" href="{{ url_for('log') }}">Лог</a>
+                        <a class="dropdown-item" href="{{ url_for('stat') }}">Статистика</a>
+                        <a class="dropdown-item" href="{{ url_for('ctrl') }}">Управление</a>
+                    </div>
+                </div>
+                <a class="col-5 col-sm-3 text-right" href="{{ url_for('logout') }}">Log out</a>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+            {% block my_content %}{% endblock %}
+    </div>
+{% endblock %}

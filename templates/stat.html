@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block my_content %}
+<div class="row justify-content-between">
+    <div class="col-md-4" style="margin-bottom: 15px;">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Самые активные юзеры</h5>
+                <p class="card-text">
+                    <table class="table table-sm">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">First name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{top_users[0][0]}}</td>
+                        <td>{{top_users[0][1]}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{top_users[1][0]}}</td>
+                        <td>{{top_users[1][1]}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{top_users[2][0]}}</td>
+                        <td>{{top_users[2][1]}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4" style="margin-bottom: 15px;">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Самые популярные команды</h5>
+                <p class="card-text">
+                    <table class="table table-sm">
+                    <thead>
+                    <tr>
+                        <th scope="col">Команда</th>
+                        <th scope="col">Количество раз</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{command[0][0]}}</td>
+                        <td>{{command[0][1]}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{command[1][0]}}</td>
+                        <td>{{command[1][1]}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{command[2][0]}}</td>
+                        <td>{{command[2][1]}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4" style="margin-bottom: 15px;">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Уникальные пользователи</h5>
+                <p class="card-text">{{unique_users[0][0]}} штуки</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

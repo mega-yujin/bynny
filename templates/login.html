@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>Bynny</title>
+    {% endif %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if css %}
+    <link rel="stylesheet" href="{{ css }}">
+    {% else %}
+    <link rel="stylesheet" href="static/style.css">
+    {% endif %}
+    <!--	<link rel="icon" type="image/x-icon" href=""/>-->
+</head>
+<body>
+    <form class="form-signin" action="{{ url_for('login') }}" method="post">
+<!--        <img class="login-form" src="static/coin.png" alt="" width="72" height="72">-->
+        <h1 class="login-header">Please log in</h1>
+        <input type="text" name="username" id="inputEmail" class="input-email" placeholder="User name" required>
+        <input type="password" name="password" id="inputPassword" class="input-password" placeholder="Password" required>
+        <div class="remember-me">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div>
+        {% if error %}
+        <p class="error"><strong>Error: </strong>{{ error }}</p>
+        {% endif %}
+        <button class="log-in-button" type="submit">Log in</button>
+        <p class="p-footer">&copy; 2020-{{ year }}</p>
+    </form>
+</body>
+</html>
