@@ -1,4 +1,4 @@
-##Python telegram bot with flask web gui
+## Python telegram bot with flask web gui
 
 **Bynny** is a telegram bot that provide Belarusian ruble (*byn*) exchange rates.
 

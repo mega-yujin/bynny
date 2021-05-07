@@ -2,7 +2,7 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 from config import *
 
-CONFIG = ProductionConfig
+CONFIG = DevelopmentConfig
 
 server = Flask(__name__)
 Bootstrap(server)
