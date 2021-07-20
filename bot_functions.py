@@ -9,13 +9,13 @@ def get_rates(is_web_or_bot):
         r = requests.get('https://www.nbrb.by/API/ExRates/Rates?Periodicity=0').json()
 
         for i in r:
-            if i['Cur_ID'] == 145:
+            if i['Cur_ID'] == 431:
                 usd_dict = dict(i)
-            elif i['Cur_ID'] == 292:
+            elif i['Cur_ID'] == 451:
                 eur_dict = dict(i)
-            elif i['Cur_ID'] == 297:
+            elif i['Cur_ID'] == 455:
                 nok_dict = dict(i)
-            elif i['Cur_ID'] == 298:
+            elif i['Cur_ID'] == 456:
                 rur_dict = dict(i)
 
         usd = usd_dict["Cur_Name"] + ': ' + str(usd_dict['Cur_OfficialRate']) + ' BYN'
@@ -47,11 +47,11 @@ def get_byn_cost(is_web_or_bot):
         r = requests.get('https://www.nbrb.by/API/ExRates/Rates?Periodicity=0').json()
 
         for i in r:
-            if i['Cur_ID'] == 145:
+            if i['Cur_ID'] == 431:
                 usd_dict = dict(i)
-            elif i['Cur_ID'] == 292:
+            elif i['Cur_ID'] == 451:
                 eur_dict = dict(i)
-            elif i['Cur_ID'] == 298:
+            elif i['Cur_ID'] == 456:
                 rur_dict = dict(i)
 
         usd = float("{:.6f}".format(1 / (usd_dict['Cur_OfficialRate'])))

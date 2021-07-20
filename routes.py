@@ -12,14 +12,14 @@ import db_connect
 @server.route('/')  # main page
 @login_check
 def index():
-    # rates = bot_functions.get_rates('web')
-    # byn_cost = bot_functions.get_byn_cost('web')
-    # exchange_rates = bot_functions.get_exchange_rates('web')
+    rates = bot_functions.get_rates('web')
+    byn_cost = bot_functions.get_byn_cost('web')
+    exchange_rates = bot_functions.get_exchange_rates('web')
 
     # this values used for local testing
-    rates = ('aaa', 'bbb', 'ccc', 'ddd')
-    byn_cost = ('aaa', 'bbb', 'ccc', 'ddd')
-    exchange_rates = ('aaa', 'bbb', 'ccc', 'ddd')
+    # rates = ('aaa', 'bbb', 'ccc', 'ddd')
+    # byn_cost = ('aaa', 'bbb', 'ccc', 'ddd')
+    # exchange_rates = ('aaa', 'bbb', 'ccc', 'ddd')
 
     return render_template('index.html', title='Bynny::Main', rates=rates, byn_cost=byn_cost,
                            exchange_rates=exchange_rates)
