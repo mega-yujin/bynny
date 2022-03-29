@@ -2,11 +2,13 @@ import random
 import requests
 from bs4 import BeautifulSoup
 
+headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0'}
+
 
 # get official byn rates from nbrb.by API
 def get_rates(is_web_or_bot):
     try:
-        r = requests.get('https://www.nbrb.by/API/ExRates/Rates?Periodicity=0').json()
+        r = requests.get('https://www.nbrb.by/API/ExRates/Rates?Periodicity=0', headers=headers).json()
 
         for i in r:
             if i['Cur_ID'] == 431:
@@ -20,8 +22,10 @@ def get_rates(is_web_or_bot):
 
         usd = usd_dict["Cur_Name"] + ': ' + str(usd_dict['Cur_OfficialRate']) + ' BYN'
         eur = eur_dict["Cur_Name"] + ': ' + str(eur_dict['Cur_OfficialRate']) + ' BYN'
-        rur = str(rur_dict["Cur_Scale"]) + ' ' + rur_dict["Cur_Name"] + ': ' + str(rur_dict['Cur_OfficialRate']) + ' BYN'
-        nok = str(nok_dict["Cur_Scale"]) + ' ' + nok_dict["Cur_Name"] + ': ' + str(nok_dict['Cur_OfficialRate']) + ' BYN'
+        rur = str(rur_dict["Cur_Scale"]) + ' ' + rur_dict["Cur_Name"] + ': ' + str(
+            rur_dict['Cur_OfficialRate']) + ' BYN'
+        nok = str(nok_dict["Cur_Scale"]) + ' ' + nok_dict["Cur_Name"] + ': ' + str(
+            nok_dict['Cur_OfficialRate']) + ' BYN'
 
         if is_web_or_bot == 'bot':
             rates = usd + '\n' + eur + '\n' + rur + '\n' + nok
@@ -44,7 +48,7 @@ def get_rates(is_web_or_bot):
 # get byn cost in usd, eur, rur from nbrb.by API
 def get_byn_cost(is_web_or_bot):
     try:
-        r = requests.get('https://www.nbrb.by/API/ExRates/Rates?Periodicity=0').json()
+        r = requests.get('https://www.nbrb.by/API/ExRates/Rates?Periodicity=0', headers=headers).json()
 
         for i in r:
             if i['Cur_ID'] == 431:
@@ -79,28 +83,31 @@ def get_byn_cost(is_web_or_bot):
 # get stock exchange rates with BeautifulSoup
 def get_exchange_rates(is_web_or_bot):
     try:
-        page = requests.get('https://bankibel.by/torgi-na-bvfb')
+        page = requests.get('https://banki24.by/exchange/currencymarket', headers=headers)
         soup = BeautifulSoup(page.text, "html.parser")
-        currency_value = soup.find_all('div', class_='curr_val')
-        curr_value_change = soup.find_all('div', class_='change')
+        # currency_value = soup.find_all('p', class_='text-center h1 mt-0')
+        currency_value = soup.select('p.text-center.h1.mt-0')
+        # currency_change = soup.find_all('span', class_='pull-left label label-danger')
+        currency_change = soup.select('span.pull-left.label')
 
         currency = []
         change = []
 
         for i in range(len(currency_value)):
-            currency.append(currency_value[i].text)
+            currency.append(currency_value[i].text.replace('\n', '').replace('\t', ''))
 
-        for i in range(len(curr_value_change)):
-            change.append(curr_value_change[i].text)
+        for i in range(len(currency_change)):
+            change.append(currency_change[i].text.replace('\n', '').replace('\t', '').replace('&plus', '+'))
 
-        usd = '1 USD: ' + str(currency[0]).lstrip() + ' (' + str(change[0]) + ')'
-        eur = '1 EUR: ' + str(currency[1]).lstrip() + ' (' + str(change[2]) + ')'
-        rur = '100 RUR: ' + str(currency[2]).lstrip() + ' (' + str(change[4]) + ')'
+        usd = f'1 USD: {currency[0]}  ({change[0]})'
+        eur = f'1 EUR: {currency[1]} ({change[1]})'
+        rur = f'100 RUR: {currency[2]} ({change[2]})'
+        cny = f'10 CNY: {currency[3]} ({change[3]})'
 
         if is_web_or_bot == 'bot':
-            exchange_rates = 'Результаты торгов:\n' + usd + '\n' + eur + '\n' + rur
+            exchange_rates = 'Результаты торгов:\n' + usd + '\n' + eur + '\n' + rur + '\n' + cny
         else:
-            exchange_rates = (usd, eur, rur)
+            exchange_rates = (usd, eur, rur, cny)
 
     except requests.exceptions.ConnectionError as err:
         exchange_rates = '# Connection error #'
