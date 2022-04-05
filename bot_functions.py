@@ -28,7 +28,7 @@ def get_rates(is_web_or_bot):
             nok_dict['Cur_OfficialRate']) + ' BYN'
 
         if is_web_or_bot == 'bot':
-            rates = usd + '\n' + eur + '\n' + rur + '\n' + nok
+            rates = f'{usd}\n{eur}\n{rur}\n{nok}'
         else:
             rates = (usd, eur, rur, nok)
 
@@ -63,7 +63,7 @@ def get_byn_cost(is_web_or_bot):
         rur = float("{:.6f}".format(100 / (rur_dict['Cur_OfficialRate'])))
 
         if is_web_or_bot == 'bot':
-            byn_cost = '1 BYN стоит:\n' + str(usd) + ' USD\n' + str(eur) + ' EUR\n' + str(rur) + ' RUR'
+            byn_cost = f'1 BYN стоит:\n {str(usd)} USD\n {str(eur)} EUR\n {str(rur)} RUR'
         else:
             byn_cost = (str(usd), str(eur), str(rur))
 
@@ -105,7 +105,7 @@ def get_exchange_rates(is_web_or_bot):
         cny = f'10 CNY: {currency[3]} ({change[3]})'
 
         if is_web_or_bot == 'bot':
-            exchange_rates = 'Результаты торгов:\n' + usd + '\n' + eur + '\n' + rur + '\n' + cny
+            exchange_rates = f'Результаты торгов:\n {usd} \n {eur} \n {rur} \n {cny}'
         else:
             exchange_rates = (usd, eur, rur, cny)
 
