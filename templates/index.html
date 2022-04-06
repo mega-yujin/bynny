@@ -7,7 +7,11 @@
             <!--				<img src="..." class="card-img-top" alt="...">-->
             <div class="card-body">
                 <h5 class="card-title">Курс НБРБ</h5>
-                <p class="card-text">{{rates[0]}}<br>{{rates[1]}}<br>{{rates[2]}}<br>{{rates[3]}}</p>
+                <p class="card-text">
+                    {% for currency in rates %}
+                        {{currency}}<br>
+                    {% endfor %}
+                </p>
                 <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
             </div>
         </div>
@@ -56,7 +60,11 @@
             <!--				<img src="..." class="card-img-top" alt="...">-->
             <div class="card-body">
                 <h5 class="card-title">Стоимость 1 BYN</h5>
-                <p class="card-text">{{byn_cost[0]}} USD<br>{{byn_cost[1]}} EUR<br>{{byn_cost[2]}} RUR</p>
+                <p class="card-text">
+                    {% for currency in byn_cost %}
+                        {{currency}}<br>
+                    {% endfor %}
+                </p>
                 <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
             </div>
         </div>
@@ -66,10 +74,11 @@
              <!--				<img src="..." class="card-img-top" alt="...">-->
             <div class="card-body">
                 <h5 class="card-title">Результаты торгов на бирже</h5>
-                <p class="card-text">{{exchange_rates[0]}}<br>
-                                     {{exchange_rates[1]}}<br>
-                                     {{exchange_rates[2]}}<br>
-                                     {{exchange_rates[3]}}</p>
+                <p class="card-text">
+                    {% for currency in exchange_rates %}
+                        {{currency}}<br>
+                    {% endfor %}
+                </p>
                 <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
             </div>
         </div>
