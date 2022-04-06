@@ -12,9 +12,9 @@ import db_connect
 @server.route('/')  # main page
 @login_check
 def index():
-    rates = bot_functions.get_rates('web')
-    byn_cost = bot_functions.get_byn_cost('web')
-    exchange_rates = bot_functions.get_exchange_rates('web')
+    rates = bot_functions.get_rates()
+    byn_cost = bot_functions.get_byn_cost()
+    exchange_rates = bot_functions.get_exchange_rates()
 
     # this values used for local testing
     # rates = ('aaa', 'bbb', 'ccc', 'ddd')
@@ -31,9 +31,9 @@ def login():
     year = datetime.datetime.now()
     if request.method == 'POST':
         if request.form['username'] != server.config['USERNAME']:
-            error = 'Invalid username'
+            error = 'Invalid username or password'
         elif request.form['password'] != server.config['PASSWORD']:
-            error = 'Invalid password'
+            error = 'Invalid username or password'
         else:
             session['logged_in'] = True
             return redirect(url_for('index'))
