@@ -8,7 +8,7 @@ headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gec
 # get official byn rates from nbrb.by API
 def get_rates():
     try:
-        r = requests.get('https://www.nbrb.by/API/ExRates/Rates?Periodicity=0', headers=headers).json()
+        r = requests.get('https://www.nbrb.by/API/ExRates/Rates?Periodicity=0', headers=headers, timeout=(3, 25)).json()
 
         for i in r:
             if i['Cur_ID'] == 431:
@@ -45,7 +45,7 @@ def get_rates():
 # get byn cost in usd, eur, rur from nbrb.by API
 def get_byn_cost():
     try:
-        r = requests.get('https://www.nbrb.by/API/ExRates/Rates?Periodicity=0', headers=headers).json()
+        r = requests.get('https://www.nbrb.by/API/ExRates/Rates?Periodicity=0', headers=headers, timeout=(3, 25)).json()
 
         for i in r:
             if i['Cur_ID'] == 431:
@@ -77,7 +77,7 @@ def get_byn_cost():
 # get stock exchange rates with BeautifulSoup
 def get_exchange_rates():
     try:
-        page = requests.get('https://banki24.by/exchange/currencymarket', headers=headers)
+        page = requests.get('https://banki24.by/exchange/currencymarket', headers=headers, timeout=(3, 25))
         soup = BeautifulSoup(page.text, "html.parser")
         # currency_value = soup.find_all('p', class_='text-center h1 mt-0')
         currency_value = soup.select('p.text-center.h1.mt-0')
