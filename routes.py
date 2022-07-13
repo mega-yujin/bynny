@@ -6,6 +6,11 @@ from flask import request, render_template, redirect, url_for, session
 import telebot
 import datetime
 import db_connect
+from services import WebService
+
+web_service = WebService(
+    db_connect.UseDatabase(app.config['DB_CONFIG'])
+)
 
 
 # ============== web gui routes ==============
@@ -92,14 +97,14 @@ def get_message():
     return "!", 200
 
 
-@app.route("/swh")  # set webhook
+@app.route("/swh")
 def st_webhook():
     bot.remove_webhook()
     bot.set_webhook(app.config['SERVER_URL'] + app.config['TOKEN'])
     return "!",
 
 
-@app.route("/rwh")  # remove webhook
+@app.route("/rwh")
 def rm_webhook():
     bot.remove_webhook()
     return "!",
