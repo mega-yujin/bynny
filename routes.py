@@ -1,20 +1,25 @@
-from main import server, CONFIG
+from config import app
 from bot import bot
-import bot_functions
+import bot_service
 from utils import login_check
 from flask import request, render_template, redirect, url_for, session
 import telebot
 import datetime
 import db_connect
+from services import WebService
+
+web_service = WebService(
+    db_connect.UseDatabase(app.config['DB_CONFIG'])
+)
 
 
 # ============== web gui routes ==============
-@server.route('/')  # main page
+@app.route('/')
 @login_check
 def index():
-    rates = bot_functions.get_rates()
-    byn_cost = bot_functions.get_byn_cost()
-    exchange_rates = bot_functions.get_exchange_rates()
+    rates = bot_service.get_rates()
+    byn_cost = bot_service.get_byn_cost()
+    exchange_rates = bot_service.get_exchange_rates()
 
     # this values used for local testing
     # rates = ('aaa', 'bbb', 'ccc', 'ddd')
@@ -25,14 +30,14 @@ def index():
                            exchange_rates=exchange_rates)
 
 
-@server.route('/login', methods=['GET', 'POST'])  # login page
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
     year = datetime.datetime.now()
     if request.method == 'POST':
-        if request.form['username'] != server.config['USERNAME']:
+        if request.form['username'] != app.config['USERNAME']:
             error = 'Invalid username or password'
-        elif request.form['password'] != server.config['PASSWORD']:
+        elif request.form['password'] != app.config['PASSWORD']:
             error = 'Invalid username or password'
         else:
             session['logged_in'] = True
@@ -40,16 +45,16 @@ def login():
     return render_template('login.html', title='Bynny', css='static/login.css', error=error, year=year.year)
 
 
-@server.route('/logout')  # log out route
+@app.route('/logout')
 def logout():
     session.pop('logged_in', None)
     return redirect(url_for('index'))
 
 
-@server.route('/stat')  # bot usage statistic page
+@app.route('/stat')
 @login_check
 def stat():
-    with db_connect.UseDatabase(CONFIG.DB_CONFIG) as cursor:
+    with db_connect.UseDatabase(app.config['DB_CONFIG']) as cursor:
         # unique bot users bu user_id
         _SQL = """SELECT COUNT(DISTINCT user_id) FROM requests;"""
         cursor.execute(_SQL)
@@ -68,38 +73,38 @@ def stat():
                            top_users=top_users)
 
 
-@server.route('/log')  # bot requests log from database
+@app.route('/log')
 @login_check
 def log():
     rows_num = request.args.get('rows', default=5)
-    with db_connect.UseDatabase(CONFIG.DB_CONFIG) as cursor:
+    with db_connect.UseDatabase(app.config['DB_CONFIG']) as cursor:
         _SQL = """SELECT * FROM (SELECT * FROM requests ORDER BY id DESC LIMIT %s) t ORDER BY id;""" % rows_num
         cursor.execute(_SQL)
         contents = cursor.fetchall()
     return render_template('log.html', title='Bynny::Log', the_data=contents, rows=rows_num)
 
 
-@server.route('/ctrl')  # webhook control page
+@app.route('/ctrl')
 @login_check
 def ctrl():
     return render_template('ctrl.html', title='Bynny::Control room')
 
 
 # ============== bot routes ==============
-@server.route('/' + CONFIG.TOKEN, methods=['POST'])  # get messages
+@app.route('/' + app.config['TOKEN'], methods=['POST'])  # get messages
 def get_message():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "!", 200
 
 
-@server.route("/swh")  # set webhook
+@app.route("/swh")
 def st_webhook():
     bot.remove_webhook()
-    bot.set_webhook(CONFIG.SERVER_URL + CONFIG.TOKEN)
+    bot.set_webhook(app.config['SERVER_URL'] + app.config['TOKEN'])
     return "!",
 
 
-@server.route("/rwh")  # remove webhook
+@app.route("/rwh")
 def rm_webhook():
     bot.remove_webhook()
     return "!",

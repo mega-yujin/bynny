@@ -1,14 +1,15 @@
-# Some useful utils
-
 import db_connect
 import datetime
 from flask import session, redirect, url_for
 from functools import wraps
-from main import CONFIG
+from config import CONFIG
 
 
-# is logged check
 def login_check(func):
+    """
+    Checks if user logged in or not
+    """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         if not session.get('logged_in'):
@@ -18,7 +19,6 @@ def login_check(func):
     return wrapper
 
 
-# writing bot request to database
 def log_to_db(message, answer):
     timestamp = datetime.datetime.fromtimestamp(message.date)
     if message.from_user.last_name is None:
@@ -32,9 +32,9 @@ def log_to_db(message, answer):
         username = message.from_user.username
 
     with db_connect.UseDatabase(CONFIG.DB_CONFIG) as cursor:
-        _SQL = """insert into requests
+        _SQL = """INSERT INTO requests
                   (user_id, first_name, last_name, username, user_message, bot_answer, bot_timestamp)
-                  values
+                  VALUES
                   (%s, %s, %s, %s, %s, %s, %s)"""
         cursor.execute(_SQL, (message.from_user.id,
                               message.from_user.first_name,

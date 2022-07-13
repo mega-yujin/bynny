@@ -1,4 +1,7 @@
 import os
+import telebot
+from flask import Flask
+from flask_bootstrap import Bootstrap
 from dotenv import load_dotenv
 
 dotenv_path = os.path.join(os.path.dirname(__file__), 'config.env')
@@ -40,3 +43,12 @@ class DevelopmentConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
     DEBUG = False
+
+
+CONFIG = ProductionConfig
+
+app = Flask(__name__)
+app.config.from_object(DevelopmentConfig)
+Bootstrap(app)
+
+bot = telebot.TeleBot(app.config['TOKEN'])
