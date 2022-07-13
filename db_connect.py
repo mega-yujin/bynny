@@ -1,9 +1,7 @@
-# Database connection module
-
 import mysql.connector
 
 
-class ConnectionError(Exception):
+class DBConnectionError(Exception):
     pass
 
 
@@ -25,7 +23,7 @@ class UseDatabase:
             self.cursor = self.conn.cursor()
             return self.cursor
         except mysql.connector.errors.InterfaceError as err:
-            raise ConnectionError(err)
+            raise DBConnectionError(err)
         except mysql.connector.errors.ProgrammingError as err:
             raise CredentialsError(err)
 
