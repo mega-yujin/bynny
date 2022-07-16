@@ -33,7 +33,7 @@ class WebService:
         _SQL = """SELECT user_id, first_name FROM requests GROUP BY user_id ORDER BY COUNT(user_id) DESC LIMIT 3;"""
         return self._execute(_SQL)
 
-    def show_log(self, rows_num: int):
+    def get_log(self, rows_num: int):
         _SQL = """SELECT * FROM (SELECT * FROM requests ORDER BY id DESC LIMIT %s) t ORDER BY id;"""
         return self._execute(_SQL, (rows_num,))
 

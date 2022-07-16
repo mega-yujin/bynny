@@ -6,7 +6,7 @@ from flask import request, render_template, redirect, url_for, session
 import telebot
 import datetime
 import db_connect
-from services import WebService
+from services import WebService, BotService
 
 web_service = WebService(
     db_connect.UseDatabase(app.config['DB_CONFIG'])
@@ -17,14 +17,14 @@ web_service = WebService(
 @app.route('/')
 @login_check
 def index():
-    rates = bot_service.get_rates()
-    byn_cost = bot_service.get_byn_cost()
-    exchange_rates = bot_service.get_exchange_rates()
+    # rates = bot_service.get_rates()
+    # byn_cost = bot_service.get_byn_cost()
+    # exchange_rates = bot_service.get_exchange_rates()
 
     # this values used for local testing
-    # rates = ('aaa', 'bbb', 'ccc', 'ddd')
-    # byn_cost = ('aaa', 'bbb', 'ccc', 'ddd')
-    # exchange_rates = ('aaa', 'bbb', 'ccc', 'ddd')
+    rates = ('aaa', 'bbb', 'ccc', 'ddd')
+    byn_cost = ('aaa', 'bbb', 'ccc', 'ddd')
+    exchange_rates = ('aaa', 'bbb', 'ccc', 'ddd')
 
     return render_template('index.html', title='Bynny::Main', rates=rates, byn_cost=byn_cost,
                            exchange_rates=exchange_rates)
@@ -54,44 +54,40 @@ def logout():
 @app.route('/stat')
 @login_check
 def stat():
-    with db_connect.UseDatabase(app.config['DB_CONFIG']) as cursor:
-        # unique bot users bu user_id
-        _SQL = """SELECT COUNT(DISTINCT user_id) FROM requests;"""
-        cursor.execute(_SQL)
-        unique_users = cursor.fetchall()
+    unique_users = web_service.get_unique_users()
+    most_usage_commands = web_service.get_most_usage_commands()
+    most_active_users = web_service.get_most_active_users()
+    context = {
+        'title': 'Bynny::Statistics',
+        'unique_users': unique_users,
+        'command': most_usage_commands,
+        'top_users': most_active_users
+    }
 
-        # most usage bot commands
-        _SQL = """SELECT user_message, count(*) c FROM requests GROUP BY user_message ORDER BY c DESC LIMIT 3;"""
-        cursor.execute(_SQL)
-        command = cursor.fetchall()
-
-        # 3 most active bot users
-        _SQL = """SELECT user_id, first_name FROM requests GROUP BY user_id ORDER BY COUNT(user_id) DESC LIMIT 3;"""
-        cursor.execute(_SQL)
-        top_users = cursor.fetchall()
-    return render_template('stat.html', title='Bynny::Statistics', unique_users=unique_users, command=command,
-                           top_users=top_users)
+    return render_template('stat.html', **context)
 
 
 @app.route('/log')
 @login_check
 def log():
-    rows_num = request.args.get('rows', default=5)
-    with db_connect.UseDatabase(app.config['DB_CONFIG']) as cursor:
-        _SQL = """SELECT * FROM (SELECT * FROM requests ORDER BY id DESC LIMIT %s) t ORDER BY id;""" % rows_num
-        cursor.execute(_SQL)
-        contents = cursor.fetchall()
-    return render_template('log.html', title='Bynny::Log', the_data=contents, rows=rows_num)
+    rows_num = int(request.args.get('rows', default=5))
+    data = web_service.get_log(rows_num)
+    context = {
+        'title': 'Bynny::Log',
+        'data': data,
+        'rows_num': rows_num
+    }
+    return render_template('log.html', **context)
 
 
-@app.route('/ctrl')
+@app.route('/management')
 @login_check
-def ctrl():
+def management():
     return render_template('ctrl.html', title='Bynny::Control room')
 
 
 # ============== bot routes ==============
-@app.route('/' + app.config['TOKEN'], methods=['POST'])  # get messages
+@app.route('/' + app.config['TOKEN'], methods=['POST'])
 def get_message():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "!", 200
@@ -101,10 +97,10 @@ def get_message():
 def st_webhook():
     bot.remove_webhook()
     bot.set_webhook(app.config['SERVER_URL'] + app.config['TOKEN'])
-    return "!",
+    return "!", 200
 
 
 @app.route("/rwh")
 def rm_webhook():
     bot.remove_webhook()
-    return "!",
+    return "!", 200
