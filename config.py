@@ -1,15 +1,18 @@
 import os
+from dataclasses import dataclass
 import telebot
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from dotenv import load_dotenv
+
 
 dotenv_path = os.path.join(os.path.dirname(__file__), 'config.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
 
-class BaseConfig(object):
+@dataclass
+class BaseConfig:
     DEBUG = False
     SECRET_KEY = os.getenv('SECRET_KEY')
     TOKEN = os.getenv('TOKEN')
@@ -48,7 +51,7 @@ class ProductionConfig(BaseConfig):
 CONFIG = ProductionConfig
 
 app = Flask(__name__)
-app.config.from_object(DevelopmentConfig)
+app.config.from_object(CONFIG)
 Bootstrap(app)
 
 bot = telebot.TeleBot(app.config['TOKEN'])

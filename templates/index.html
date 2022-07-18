@@ -8,7 +8,7 @@
             <div class="card-body">
                 <h5 class="card-title">Курс НБРБ</h5>
                 <p class="card-text">
-                    {% for currency in rates %}
+                    {% for currency in national_bank_exchange_rates %}
                         {{currency}}<br>
                     {% endfor %}
                 </p>
@@ -75,7 +75,7 @@
             <div class="card-body">
                 <h5 class="card-title">Результаты торгов на бирже</h5>
                 <p class="card-text">
-                    {% for currency in exchange_rates %}
+                    {% for currency in exchange_trading_results %}
                         {{currency}}<br>
                     {% endfor %}
                 </p>

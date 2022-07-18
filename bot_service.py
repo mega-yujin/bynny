@@ -51,83 +51,43 @@ def get_rates() -> list:
     """
     returns official byn rates from nbrb.by API
     """
-    rates = None
-    try:
-        usd = get_currency(CURRENCY_CODES.get('USD'))
-        eur = get_currency(CURRENCY_CODES.get('EUR'))
-        rur = get_currency(CURRENCY_CODES.get('RUB'))
-        nok = get_currency(CURRENCY_CODES.get('NOK'))
-
-        rates = format_currency_rates(usd, eur, rur, nok)
-
-    except requests.exceptions.ConnectionError as e:
-        rates = ('# Connection error #',)
-        print(e)
-    except requests.exceptions.HTTPError as e:
-        rates = ('# HTTP error #',)
-        print(e)
-    except requests.exceptions.Timeout as e:
-        rates = ('# Timeout error #',)
-        print(e)
-
+    usd = get_currency(CURRENCY_CODES.get('USD'))
+    eur = get_currency(CURRENCY_CODES.get('EUR'))
+    rur = get_currency(CURRENCY_CODES.get('RUB'))
+    nok = get_currency(CURRENCY_CODES.get('NOK'))
+    rates = format_currency_rates(usd, eur, rur, nok)
     return rates
 
 
 # get byn cost in usd, eur, rur from nbrb.by API
 def get_byn_cost() -> list:
-    try:
-        r = get_data(ALL_DAILY_RATES, HEADERS).json()
-
-        usd = get_currency(CURRENCY_CODES.get('USD'))
-        eur = get_currency(CURRENCY_CODES.get('EUR'))
-        rur = get_currency(CURRENCY_CODES.get('RUB'))
-
-        byn_cost = format_byn_cost(usd, eur, rur)
-
-    except requests.exceptions.ConnectionError as err:
-        byn_cost = ('# Connection error #',)
-        print(err)
-    except requests.exceptions.HTTPError as err:
-        byn_cost = ('# HTTP error #',)
-        print(err)
-    except requests.exceptions.Timeout as err:
-        byn_cost = ('# Timeout error #',)
-        print(err)
-
+    usd = get_currency(CURRENCY_CODES.get('USD'))
+    eur = get_currency(CURRENCY_CODES.get('EUR'))
+    rur = get_currency(CURRENCY_CODES.get('RUB'))
+    byn_cost = format_byn_cost(usd, eur, rur)
     return byn_cost
 
 
 # get stock exchange rates with BeautifulSoup
 def get_exchange_rates():
-    try:
-        page = get_data(CURRENCY_MARKET, HEADERS)
-        soup = BeautifulSoup(page.text, "html.parser")
-        raw_currency_value = soup.select('p.text-center.h1.mt-0')
-        raw_currency_change = soup.select('span.pull-left.label')
+    page = get_data(CURRENCY_MARKET, HEADERS)
+    soup = BeautifulSoup(page.text, "html.parser")
+    raw_currency_value = soup.select('p.text-center.h1.mt-0')
+    raw_currency_change = soup.select('span.pull-left.label')
 
-        currency_value = [
-            item.text.replace('\n', '').replace('\t', '') for item in raw_currency_value
-        ]
-        currency_change = [
-            item.text.replace('\n', '').replace('\t', '').replace('&plus', '+') for item in raw_currency_change
-        ]
+    currency_value = [
+        item.text.replace('\n', '').replace('\t', '') for item in raw_currency_value
+    ]
+    currency_change = [
+        item.text.replace('\n', '').replace('\t', '').replace('&plus', '+') for item in raw_currency_change
+    ]
 
-        usd = f'1 USD: {currency_value[0]} ({currency_change[0]})'
-        eur = f'1 EUR: {currency_value[1]} ({currency_change[1]})'
-        rur = f'100 RUR: {currency_value[2]} ({currency_change[2]})'
-        cny = f'10 CNY: {currency_value[3]} ({currency_change[3]})'
+    usd = f'1 USD: {currency_value[0]} ({currency_change[0]})'
+    eur = f'1 EUR: {currency_value[1]} ({currency_change[1]})'
+    rur = f'100 RUR: {currency_value[2]} ({currency_change[2]})'
+    cny = f'10 CNY: {currency_value[3]} ({currency_change[3]})'
 
-        exchange_rates = (usd, eur, rur, cny)
-
-    except requests.exceptions.ConnectionError as err:
-        exchange_rates = ('# Connection error #',)
-        print(err)
-    except requests.exceptions.HTTPError as err:
-        exchange_rates = ('# HTTP error #',)
-        print(err)
-    except requests.exceptions.Timeout as err:
-        exchange_rates = ('# Timeout error #',)
-        print(err)
+    exchange_rates = (usd, eur, rur, cny)
 
     return exchange_rates
 

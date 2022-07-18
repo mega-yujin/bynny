@@ -17,17 +17,14 @@ web_service = WebService(
 @app.route('/')
 @login_check
 def index():
-    # rates = bot_service.get_rates()
-    # byn_cost = bot_service.get_byn_cost()
-    # exchange_rates = bot_service.get_exchange_rates()
+    context = {
+        'title': 'Bynny::Main',
+        'national_bank_exchange_rates': bot_service.get_rates(),
+        'byn_cost': bot_service.get_byn_cost(),
+        'exchange_trading_results': bot_service.get_exchange_rates()
+    }
 
-    # this values used for local testing
-    rates = ('aaa', 'bbb', 'ccc', 'ddd')
-    byn_cost = ('aaa', 'bbb', 'ccc', 'ddd')
-    exchange_rates = ('aaa', 'bbb', 'ccc', 'ddd')
-
-    return render_template('index.html', title='Bynny::Main', rates=rates, byn_cost=byn_cost,
-                           exchange_rates=exchange_rates)
+    return render_template('index.html', **context)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -54,16 +51,12 @@ def logout():
 @app.route('/stat')
 @login_check
 def stat():
-    unique_users = web_service.get_unique_users()
-    most_usage_commands = web_service.get_most_usage_commands()
-    most_active_users = web_service.get_most_active_users()
     context = {
         'title': 'Bynny::Statistics',
-        'unique_users': unique_users,
-        'command': most_usage_commands,
-        'top_users': most_active_users
+        'unique_users': web_service.get_unique_users(),
+        'most_usage_commands': web_service.get_most_usage_commands(),
+        'most_active_users': web_service.get_most_active_users()
     }
-
     return render_template('stat.html', **context)
 
 
@@ -89,7 +82,9 @@ def management():
 # ============== bot routes ==============
 @app.route('/' + app.config['TOKEN'], methods=['POST'])
 def get_message():
-    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+    bot.process_new_updates(
+        [telebot.types.Update.de_json(request.stream.read().decode("utf-8"))]
+    )
     return "!", 200
 
 
