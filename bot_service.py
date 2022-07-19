@@ -13,7 +13,7 @@ CURRENCY_CODES = {'AUD': 440, 'AMD': 510, 'BGN': 441, 'UAH': 449, 'DKK': 450, 'U
                   'CZK': 463, 'SEK': 464, 'CHF': 426}
 
 
-def get_data(url: str, headers=None) -> requests.Response:
+def get_data(url: str, headers: dict = None) -> requests.Response:
     if headers is None:
         headers = HEADERS
     try:
@@ -39,37 +39,39 @@ def get_all_currencies() -> list[dict]:
     return get_data(ALL_DAILY_RATES).json()
 
 
-def format_currency_rates(*currency: dict) -> list:
+def format_currency_rates(currency: list[dict]) -> list:
     return [f'{item.get("Cur_Name")}: {item.get("Cur_OfficialRate")} BYN' for item in currency]
 
 
-def format_byn_cost(*currency: dict) -> list:
-    return [f'{(item.get("Cur_Scale") / item.get("Cur_OfficialRate")):.6f} {item.get("Cur_Name")}' for item in currency]
+def format_byn_cost(currency: list[dict]) -> list:
+    return [
+        f'{(item.get("Cur_Scale") / item.get("Cur_OfficialRate")):.6f} {item.get("Cur_Name")}'
+        for item in currency
+    ]
 
 
-def get_rates() -> list:
+def get_rates(*currency_codes) -> list:
     """
-    returns official byn rates from nbrb.by API
+    Returns official byn rates from nbrb.by API
     """
-    usd = get_currency(CURRENCY_CODES.get('USD'))
-    eur = get_currency(CURRENCY_CODES.get('EUR'))
-    rur = get_currency(CURRENCY_CODES.get('RUB'))
-    nok = get_currency(CURRENCY_CODES.get('NOK'))
-    rates = format_currency_rates(usd, eur, rur, nok)
+    currencies = [get_currency(CURRENCY_CODES.get(code)) for code in currency_codes]
+    rates = format_currency_rates(currencies)
     return rates
 
 
-# get byn cost in usd, eur, rur from nbrb.by API
-def get_byn_cost() -> list:
-    usd = get_currency(CURRENCY_CODES.get('USD'))
-    eur = get_currency(CURRENCY_CODES.get('EUR'))
-    rur = get_currency(CURRENCY_CODES.get('RUB'))
-    byn_cost = format_byn_cost(usd, eur, rur)
+def get_byn_cost(*currency_codes) -> list:
+    """
+    Returns byn cost in usd, eur, rur from nbrb.by API
+    """
+    currencies = [get_currency(CURRENCY_CODES.get(code)) for code in currency_codes]
+    byn_cost = format_byn_cost(currencies)
     return byn_cost
 
 
-# get stock exchange rates with BeautifulSoup
 def get_exchange_rates():
+    """
+    Returns stock exchange rates with BeautifulSoup
+    """
     page = get_data(CURRENCY_MARKET, HEADERS)
     soup = BeautifulSoup(page.text, "html.parser")
     raw_currency_value = soup.select('p.text-center.h1.mt-0')
@@ -92,7 +94,6 @@ def get_exchange_rates():
     return exchange_rates
 
 
-# random bot answer
 def random_answer():
     ans = ('Прошу прощения, создатель научил меня только искать курсы валют :(',
            'Извини, я тебя не понимаю, я только учусь!',

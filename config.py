@@ -21,8 +21,8 @@ class BaseConfig:
                  'password': os.getenv('DB_PASS'),
                  'database': os.getenv('DB_NAME')}
     SERVER_URL = os.getenv('SERVER_URL')
-    USERNAME = os.getenv('USERNAME')
-    PASSWORD = os.getenv('PASSWORD')
+    USERNAME = os.getenv('PROD_USERNAME')
+    PASSWORD = os.getenv('PROD_PASSWORD')
     BOOTSTRAP_SERVE_LOCAL = True
     BOOTSTRAP_USE_MINIFIED = True
 

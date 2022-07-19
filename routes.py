@@ -19,8 +19,8 @@ web_service = WebService(
 def index():
     context = {
         'title': 'Bynny::Main',
-        'national_bank_exchange_rates': bot_service.get_rates(),
-        'byn_cost': bot_service.get_byn_cost(),
+        'national_bank_exchange_rates': bot_service.get_rates('USD', 'EUR', 'RUB', 'NOK'),
+        'byn_cost': bot_service.get_byn_cost('USD', 'EUR', 'RUB'),
         'exchange_trading_results': bot_service.get_exchange_rates()
     }
 
