@@ -1,11 +1,12 @@
-from app.config import app
-from app.bot import bot
-from app import bot_service, db_connect
+from config import app
+from bot import bot
+import bot_service
 from utils import login_check
 from flask import request, render_template, redirect, url_for, session
 import telebot
 import datetime
-from services import WebService
+import db_connect
+from services import WebService, BotService
 
 web_service = WebService(
     db_connect.UseDatabase(app.config['DB_CONFIG'])

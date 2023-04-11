@@ -1,4 +1,4 @@
-from app.db_connect import UseDatabase
+from db_connect import UseDatabase
 
 
 class BotService:
