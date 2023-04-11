@@ -6,7 +6,7 @@ from flask_bootstrap import Bootstrap
 from dotenv import load_dotenv
 
 
-dotenv_path = os.path.join(os.path.dirname(__file__), 'config.env')
+dotenv_path = os.path.join(os.path.dirname(__file__), '../config.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
@@ -48,7 +48,7 @@ class ProductionConfig(BaseConfig):
     DEBUG = False
 
 
-CONFIG = ProductionConfig
+CONFIG = DevelopmentConfig
 
 app = Flask(__name__)
 app.config.from_object(CONFIG)

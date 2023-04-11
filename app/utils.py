@@ -1,8 +1,8 @@
-import db_connect
+from app import db_connect
 import datetime
 from flask import session, redirect, url_for
 from functools import wraps
-from config import CONFIG
+from app.config import CONFIG
 
 
 def login_check(func):
