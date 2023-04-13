@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0'}
 ALL_DAILY_RATES = 'https://www.nbrb.by/API/ExRates/Rates?Periodicity=0'
-CURRENCY_RATE = 'https://www.nbrbb.by/api/exrates/rates/'
+CURRENCY_RATE = 'https://www.nbrb.by/api/exrates/rates/'
 CURRENCY_MARKET = 'https://banki24.by/exchange/currencymarket'
 
 CURRENCY_CODES = {'AUD': 440, 'AMD': 510, 'BGN': 441, 'UAH': 449, 'DKK': 450, 'USD': 431, 'EUR': 451, 'PLN': 452,

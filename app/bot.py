@@ -5,7 +5,7 @@ import service
 
 @bot.message_handler(commands=['rates'])  # nbrb official rates
 def send_rates(message):
-    rates = service.get_rates()
+    rates = service.get_rates('USD', 'EUR', 'RUB', 'NOK')
     if len(rates) != 1:
         answer = str()
         for currency in rates:
@@ -33,7 +33,7 @@ def send_ex_rates(message):
 @bot.message_handler(commands=['price'])  # 1 byn cost in usd, eur and rur
 def send_price(message):
     # f'1 BYN стоит:\n {str(usd)} USD\n {str(eur)} EUR\n {str(rur)} RUR'
-    prices = service.get_byn_cost()
+    prices = service.get_byn_cost('USD', 'EUR', 'RUB')
     if len(prices) != 1:
         answer = "1 BYN стоит:\n"
         for currency in prices:
