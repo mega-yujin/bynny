@@ -34,7 +34,7 @@ class TestConfig(BaseConfig):
 
 
 class DevelopmentConfig(BaseConfig):
-    DEBUG = True
+    DEBUG = False
     SECRET_KEY = os.getenv('DEV_SECRET_KEY')
     DB_CONFIG = {'host': os.getenv('DEV_DB_HOST'),
                  'user': os.getenv('DEV_DB_USER'),
@@ -48,7 +48,7 @@ class ProductionConfig(BaseConfig):
     DEBUG = False
 
 
-CONFIG = ProductionConfig
+CONFIG = DevelopmentConfig
 
 app = Flask(__name__)
 app.config.from_object(CONFIG)

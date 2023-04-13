@@ -1,10 +1,13 @@
 import random
 import requests
+import logging
 from bs4 import BeautifulSoup
+from typing import Union, Optional
+from dataclasses import dataclass
 
 HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0'}
 ALL_DAILY_RATES = 'https://www.nbrb.by/API/ExRates/Rates?Periodicity=0'
-CURRENCY_RATE = 'https://www.nbrb.by/api/exrates/rates/'
+CURRENCY_RATE = 'https://www.nbrbb.by/api/exrates/rates/'
 CURRENCY_MARKET = 'https://banki24.by/exchange/currencymarket'
 
 CURRENCY_CODES = {'AUD': 440, 'AMD': 510, 'BGN': 441, 'UAH': 449, 'DKK': 450, 'USD': 431, 'EUR': 451, 'PLN': 452,
@@ -16,18 +19,25 @@ CURRENCY_CODES = {'AUD': 440, 'AMD': 510, 'BGN': 441, 'UAH': 449, 'DKK': 450, 'U
 def get_data(url: str, headers: dict = None) -> requests.Response:
     if headers is None:
         headers = HEADERS
-    try:
-        response = requests.get(url, headers=headers, timeout=(3, 25))
-    except requests.exceptions.ConnectionError as e:
-        response = ('# Connection error #',)
-        print(e)
-    except requests.exceptions.HTTPError as e:
-        response = ('# HTTP error #',)
-        print(e)
-    except requests.exceptions.Timeout as e:
-        response = ('# Timeout error #',)
-        print(e)
-    return response
+    return requests.get(url, headers=headers, timeout=(3, 25))
+
+
+def handle_exception(func):
+    def wrapper(*args, **kwargs):
+        try:
+            func(*args, **kwargs)
+        except requests.exceptions.ConnectionError as e:  # TODO: refactor this shit!
+            # logging.exception(e)
+            return '# Connection error #',
+        except requests.exceptions.Timeout as e:
+            # logging.exception(e)
+            return '# Timeout error #',
+        except Exception as e:
+            # logging.exception(e)
+            return '# Exception occurred durin connection #',
+        return func(*args, *kwargs)
+
+    return wrapper
 
 
 def get_currency(currency_id: int) -> dict:
@@ -50,6 +60,7 @@ def format_byn_cost(currency: list[dict]) -> list:
     ]
 
 
+@handle_exception
 def get_rates(*currency_codes) -> list:
     """
     Returns official byn rates from nbrb.by API
@@ -59,21 +70,24 @@ def get_rates(*currency_codes) -> list:
     return rates
 
 
-def get_byn_cost(*currency_codes) -> list:
+@handle_exception
+def get_byn_cost(*currency_codes) -> tuple:
     """
     Returns byn cost in usd, eur, rur from nbrb.by API
     """
+    # data = get_data(ALL_DAILY_RATES).json(),
     currencies = [get_currency(CURRENCY_CODES.get(code)) for code in currency_codes]
     byn_cost = format_byn_cost(currencies)
     return byn_cost
 
 
+@handle_exception
 def get_exchange_rates():
     """
     Returns stock exchange rates with BeautifulSoup
     """
-    page = get_data(CURRENCY_MARKET, HEADERS)
-    soup = BeautifulSoup(page.text, "html.parser")
+    page = get_data(CURRENCY_MARKET, HEADERS).text
+    soup = BeautifulSoup(page, "html.parser")
     raw_currency_value = soup.select('p.text-center.h1.mt-0')
     raw_currency_change = soup.select('span.pull-left.label')
 
