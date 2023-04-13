@@ -6,7 +6,7 @@ from flask_bootstrap import Bootstrap
 from dotenv import load_dotenv
 
 
-dotenv_path = os.path.join(os.path.dirname(__file__), 'config.env')
+dotenv_path = os.path.join(os.path.dirname(__file__), '../config.env')
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
@@ -34,7 +34,7 @@ class TestConfig(BaseConfig):
 
 
 class DevelopmentConfig(BaseConfig):
-    DEBUG = True
+    DEBUG = False
     SECRET_KEY = os.getenv('DEV_SECRET_KEY')
     DB_CONFIG = {'host': os.getenv('DEV_DB_HOST'),
                  'user': os.getenv('DEV_DB_USER'),

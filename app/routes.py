@@ -1,6 +1,6 @@
 from config import app
 from bot import bot
-import bot_service
+import service
 from utils import login_check
 from flask import request, render_template, redirect, url_for, session
 import telebot
@@ -19,9 +19,9 @@ web_service = WebService(
 def index():
     context = {
         'title': 'Bynny::Main',
-        'national_bank_exchange_rates': bot_service.get_rates('USD', 'EUR', 'RUB', 'NOK'),
-        'byn_cost': bot_service.get_byn_cost('USD', 'EUR', 'RUB'),
-        'exchange_trading_results': bot_service.get_exchange_rates()
+        'national_bank_exchange_rates': service.get_rates('USD', 'EUR', 'RUB', 'NOK'),
+        'byn_cost': service.get_byn_cost('USD', 'EUR', 'RUB'),
+        'exchange_trading_results': service.get_exchange_rates()
     }
 
     return render_template('index.html', **context)
