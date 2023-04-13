@@ -48,7 +48,7 @@ class ProductionConfig(BaseConfig):
     DEBUG = False
 
 
-CONFIG = DevelopmentConfig
+CONFIG = ProductionConfig
 
 app = Flask(__name__)
 app.config.from_object(CONFIG)
