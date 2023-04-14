@@ -1,5 +1,6 @@
 from config import bot
 from utils import log_to_db
+from telebot import types
 import service
 
 
@@ -46,7 +47,7 @@ def send_price(message):
 
 @bot.message_handler(commands=['start'])  # start command
 def start(message):
-    keyboard = bot.types.ReplyKeyboardMarkup(True)
+    keyboard = types.ReplyKeyboardMarkup(True)
     keyboard.add('/rates')
     keyboard.add('/price')
     keyboard.add('/exchange')
